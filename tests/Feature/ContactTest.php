@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\User;
 use App\Models\Contact;
+use App\Models\User;
 
 test('un usuario puede tener varios contactos', function () {
     $user = User::factory()->create();

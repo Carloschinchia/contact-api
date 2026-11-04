@@ -29,6 +29,8 @@ Proyecto desarrollado como parte del programa ADSO (SENA), ficha 3174404.
 - [Tecnologías](#tecnologías)
 - [Requisitos](#requisitos)
 - [Instalación](#instalación)
+- [Modelo de datos](#modelo-de-datos)
+- [Datos de prueba](#datos-de-prueba)
 - [Variables de entorno](#variables-de-entorno)
 - [Pruebas](#pruebas)
 - [Documentación de la API](#documentación-de-la-api)
@@ -49,13 +51,27 @@ PHP 8.3+, Composer 2, MySQL y Git.
 
 ```bash
 git clone https://github.com/Carloschinchia/contact-api.git
-cd contacts-api
+cd contact-api
 composer install
 cp .env.example .env
 php artisan key:generate
 php artisan migrate
 php artisan serve
 ```
+
+## Modelo de datos
+
+Diagrama entidad-relación: [docs/er.md](docs/er.md)
+
+## Datos de prueba
+
+Para crear los datos de prueba en un entorno local:
+
+```bash
+php artisan db:seed
+```
+
+El seeder crea un usuario de prueba y 10 contactos asociados.
 
 ## Variables de entorno
 
