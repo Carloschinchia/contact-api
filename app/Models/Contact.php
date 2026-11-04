@@ -10,4 +10,9 @@ class Contact extends Model
 {
     /** @use HasFactory<ContactFactory> */
     use HasFactory;
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
