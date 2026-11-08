@@ -1,6 +1,8 @@
+
 <?php
 
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\ContactController;
 use App\Http\Controllers\Api\V1\HealthController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,5 +22,12 @@ Route::prefix('v1')->group(function () {
 
         Route::post('/auth/logout', [AuthController::class, 'logout'])
             ->name('auth.logout');
+
+        // Rutas de contactos.
+        Route::get('/contacts', [ContactController::class, 'index'])
+            ->name('contacts.index');
+
+        Route::post('/contacts', [ContactController::class, 'store'])
+            ->name('contacts.store');
     });
 });
