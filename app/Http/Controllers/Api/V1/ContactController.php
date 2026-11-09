@@ -34,4 +34,35 @@ class ContactController extends Controller
             'data' => $contact,
         ], 201);
     }
+
+    public function show(Request $request, int $id)
+    {
+        $contact = $request->user()
+            ->contacts()
+            ->findOrFail($id);
+
+        return response()->json([
+            'data' => $contact,
+        ]);
+    }
+    
+    public function update(Request $request, int $id)
+    {
+        $contact = $request->user()
+            ->contacts()
+            ->findOrFail($id);
+
+        $validated = $request->validate([
+            'name' => ['sometimes', 'required', 'string', 'max:255'],
+            'phone_number' => ['sometimes', 'required', 'string', 'max:20'],
+        ]);
+
+        $contact->update($validated);
+
+        return response()->json([
+            'message' => 'Contacto actualizado correctamente.',
+            'data' => $contact,
+        ]);
+    }
+
 }

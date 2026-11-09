@@ -29,5 +29,12 @@ Route::prefix('v1')->group(function () {
 
         Route::post('/contacts', [ContactController::class, 'store'])
             ->name('contacts.store');
+
+        Route::get('/contacts/{id}', [ContactController::class, 'show'])
+            ->name('contacts.show');
+
+        // Actualizar un contacto.
+        Route::put('/contacts/{id}', [ContactController::class, 'update'])
+            ->name('contacts.update');
     });
 });
