@@ -188,3 +188,30 @@ test('un usuario no puede consultar un contacto inexistente', function () {
 
     $response->assertNotFound();
 });
+
+test('un usuario no puede asignar un contacto a otro usuario', function () {
+    $carlos = User::factory()->create();
+    $ana = User::factory()->create();
+
+    Sanctum::actingAs($carlos);
+
+    $response = $this->postJson('/api/v1/contacts', [
+        'name' => 'María López',
+        'phone_number' => '3001234567',
+        'user_id' => $ana->id,
+    ]);
+
+    $response->assertCreated();
+
+    $this->assertDatabaseHas('contacts', [
+        'name' => 'María López',
+        'phone_number' => '3001234567',
+        'user_id' => $carlos->id,
+    ]);
+
+    $this->assertDatabaseMissing('contacts', [
+        'name' => 'María López',
+        'phone_number' => '3001234567',
+        'user_id' => $ana->id,
+    ]);
+});
