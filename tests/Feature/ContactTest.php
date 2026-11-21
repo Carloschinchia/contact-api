@@ -236,3 +236,20 @@ test('un usuario sin autenticación no puede consultar contactos', function () {
 
     $response->assertUnauthorized();
 });
+
+test('no se puede actualizar un contacto con un teléfono demasiado largo', function () {
+    $user = User::factory()->create();
+
+    $contact = Contact::factory()->create([
+        'user_id' => $user->id,
+    ]);
+
+    Sanctum::actingAs($user);
+
+    $response = $this->putJson("/api/v1/contacts/{$contact->id}", [
+        'phone_number' => '30012345678901234567890',
+    ]);
+
+    $response->assertUnprocessable()
+        ->assertJsonValidationErrors(['phone_number']);
+});
