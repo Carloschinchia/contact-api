@@ -224,3 +224,15 @@ test('un usuario sin autenticación no puede crear contactos', function () {
 
     $response->assertUnauthorized();
 });
+
+test('un usuario sin autenticación no puede consultar contactos', function () {
+    $user = User::factory()->create();
+
+    $contact = Contact::factory()->create([
+        'user_id' => $user->id,
+    ]);
+
+    $response = $this->getJson("/api/v1/contacts/{$contact->id}");
+
+    $response->assertUnauthorized();
+});
