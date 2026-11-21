@@ -150,3 +150,16 @@ test('no se puede crear un contacto sin nombre', function () {
     $response->assertUnprocessable()
         ->assertJsonValidationErrors(['name']);
 });
+
+test('no se puede crear un contacto sin teléfono', function () {
+    $user = User::factory()->create();
+
+    Sanctum::actingAs($user);
+
+    $response = $this->postJson('/api/v1/contacts', [
+        'name' => 'María López',
+    ]);
+
+    $response->assertUnprocessable()
+        ->assertJsonValidationErrors(['phone_number']);
+});
