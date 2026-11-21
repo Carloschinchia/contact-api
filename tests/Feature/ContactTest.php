@@ -178,3 +178,13 @@ test('un usuario sin autenticación no puede actualizar contactos', function () 
 
     $response->assertUnauthorized();
 });
+
+test('un usuario no puede consultar un contacto inexistente', function () {
+    $user = User::factory()->create();
+
+    Sanctum::actingAs($user);
+
+    $response = $this->getJson('/api/v1/contacts/99999');
+
+    $response->assertNotFound();
+});
