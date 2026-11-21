@@ -215,3 +215,12 @@ test('un usuario no puede asignar un contacto a otro usuario', function () {
         'user_id' => $ana->id,
     ]);
 });
+
+test('un usuario sin autenticación no puede crear contactos', function () {
+    $response = $this->postJson('/api/v1/contacts', [
+        'name' => 'María López',
+        'phone_number' => '3001234567',
+    ]);
+
+    $response->assertUnauthorized();
+});
