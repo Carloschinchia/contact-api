@@ -253,3 +253,26 @@ test('no se puede actualizar un contacto con un teléfono demasiado largo', func
     $response->assertUnprocessable()
         ->assertJsonValidationErrors(['phone_number']);
 });
+
+test('no se puede actualizar un contacto con el nombre vacío', function () {
+    $user = User::factory()->create();
+
+    $contact = Contact::factory()->create([
+        'user_id' => $user->id,
+        'name' => 'María López',
+    ]);
+
+    Sanctum::actingAs($user);
+
+    $response = $this->putJson("/api/v1/contacts/{$contact->id}", [
+        'name' => '',
+    ]);
+
+    $response->assertUnprocessable()
+        ->assertJsonValidationErrors(['name']);
+
+    $this->assertDatabaseHas('contacts', [
+        'id' => $contact->id,
+        'name' => 'María López',
+    ]);
+});
