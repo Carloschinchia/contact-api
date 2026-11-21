@@ -163,3 +163,18 @@ test('no se puede crear un contacto sin teléfono', function () {
     $response->assertUnprocessable()
         ->assertJsonValidationErrors(['phone_number']);
 });
+
+test('un usuario sin autenticación no puede actualizar contactos', function () {
+    $user = User::factory()->create();
+
+    $contact = Contact::factory()->create([
+        'user_id' => $user->id,
+    ]);
+
+    $response = $this->putJson("/api/v1/contacts/{$contact->id}", [
+        'name' => 'María actualizada',
+        'phone_number' => '3009876543',
+    ]);
+
+    $response->assertUnauthorized();
+});
