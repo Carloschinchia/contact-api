@@ -302,3 +302,29 @@ test('se puede actualizar solamente el nombre de un contacto', function () {
         'phone_number' => '3001234567',
     ]);
 });
+
+test('se puede actualizar solamente el teléfono de un contacto', function () {
+    $user = User::factory()->create();
+
+    $contact = Contact::factory()->create([
+        'user_id' => $user->id,
+        'name' => 'María López',
+        'phone_number' => '3001234567',
+    ]);
+
+    Sanctum::actingAs($user);
+
+    $response = $this->putJson("/api/v1/contacts/{$contact->id}", [
+        'phone_number' => '3009876543',
+    ]);
+
+    $response->assertOk()
+        ->assertJsonPath('data.name', 'María López')
+        ->assertJsonPath('data.phone_number', '3009876543');
+
+    $this->assertDatabaseHas('contacts', [
+        'id' => $contact->id,
+        'name' => 'María López',
+        'phone_number' => '3009876543',
+    ]);
+});
