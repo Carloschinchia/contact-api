@@ -137,3 +137,16 @@ test('un usuario no puede actualizar contactos de otro usuario', function () {
         'phone_number' => $contact->phone_number,
     ]);
 });
+
+test('no se puede crear un contacto sin nombre', function () {
+    $user = User::factory()->create();
+
+    Sanctum::actingAs($user);
+
+    $response = $this->postJson('/api/v1/contacts', [
+        'phone_number' => '3001234567',
+    ]);
+
+    $response->assertUnprocessable()
+        ->assertJsonValidationErrors(['name']);
+});
