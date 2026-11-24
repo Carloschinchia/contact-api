@@ -369,3 +369,19 @@ test('un usuario no puede eliminar contactos de otro usuario', function () {
         'user_id' => $owner->id,
     ]);
 });
+
+test('un usuario sin autenticación no puede eliminar contactos', function () {
+    $user = User::factory()->create();
+
+    $contact = Contact::factory()->create([
+        'user_id' => $user->id,
+    ]);
+
+    $response = $this->deleteJson("/api/v1/contacts/{$contact->id}");
+
+    $response->assertUnauthorized();
+
+    $this->assertDatabaseHas('contacts', [
+        'id' => $contact->id,
+    ]);
+});
