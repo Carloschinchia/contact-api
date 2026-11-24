@@ -349,3 +349,23 @@ test('un usuario autenticado puede eliminar un contacto propio', function () {
         'id' => $contact->id,
     ]);
 });
+
+test('un usuario no puede eliminar contactos de otro usuario', function () {
+    $owner = User::factory()->create();
+    $otherUser = User::factory()->create();
+
+    $contact = Contact::factory()->create([
+        'user_id' => $owner->id,
+    ]);
+
+    Sanctum::actingAs($otherUser);
+
+    $response = $this->deleteJson("/api/v1/contacts/{$contact->id}");
+
+    $response->assertNotFound();
+
+    $this->assertDatabaseHas('contacts', [
+        'id' => $contact->id,
+        'user_id' => $owner->id,
+    ]);
+});
