@@ -36,5 +36,9 @@ Route::prefix('v1')->group(function () {
         // Actualizar un contacto.
         Route::put('/contacts/{id}', [ContactController::class, 'update'])
             ->name('contacts.update');
+
+        // Eliminar un contacto.
+        Route::delete('/contacts/{id}', [ContactController::class, 'destroy'])
+            ->name('contacts.destroy');
     });
 });

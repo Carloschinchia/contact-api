@@ -65,4 +65,18 @@ class ContactController extends Controller
         ]);
     }
 
+        // Eliminar un contacto
+    public function destroy(Request $request, int $id)
+    {
+        $contact = $request->user()
+            ->contacts()
+            ->findOrFail($id);
+
+        $contact->delete();
+
+        return response()->json([
+            'message' => 'Contacto eliminado correctamente.',
+        ]);
+    }
+
 }
