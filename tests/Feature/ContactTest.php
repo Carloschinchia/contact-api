@@ -385,3 +385,13 @@ test('un usuario sin autenticación no puede eliminar contactos', function () {
         'id' => $contact->id,
     ]);
 });
+
+test('un usuario no puede eliminar un contacto inexistente', function () {
+    $user = User::factory()->create();
+
+    Sanctum::actingAs($user);
+
+    $response = $this->deleteJson('/api/v1/contacts/99999');
+
+    $response->assertNotFound();
+});
