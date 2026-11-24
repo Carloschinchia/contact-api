@@ -328,3 +328,24 @@ test('se puede actualizar solamente el teléfono de un contacto', function () {
         'phone_number' => '3009876543',
     ]);
 });
+
+test('un usuario autenticado puede eliminar un contacto propio', function () {
+    $user = User::factory()->create();
+
+    $contact = Contact::factory()->create([
+        'user_id' => $user->id,
+    ]);
+
+    Sanctum::actingAs($user);
+
+    $response = $this->deleteJson("/api/v1/contacts/{$contact->id}");
+
+    $response->assertOk()
+        ->assertJson([
+            'message' => 'Contacto eliminado correctamente.',
+        ]);
+
+    $this->assertDatabaseMissing('contacts', [
+        'id' => $contact->id,
+    ]);
+});
