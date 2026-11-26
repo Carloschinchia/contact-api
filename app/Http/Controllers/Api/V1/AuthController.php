@@ -27,7 +27,8 @@ class AuthController extends Controller
             abort(403, 'La cuenta está desactivada.');
         }
 
-        $token = $user->createToken($request->validated('device_name'))->plainTextToken;
+        $deviceName = $request->validated('device_name') ?? 'Dispositivo';
+        $token = $user->createToken($deviceName)->plainTextToken;
 
         return response()->json([
             'token' => $token,
